@@ -47,5 +47,6 @@ const main = async () => {
         issue_number: github.context.payload.pull_request.number,
         body: testFilesComment,
     });
+    core.setOutput('test-files', testFilesComment);
 }
 main().catch(err => core.setFailed(err.message));
