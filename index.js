@@ -1,11 +1,10 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const { GitHub } = require("@actions/github");
 const fs = require('fs');
 
 const main = async () => {
     const token = core.getInput('github-token');
-    const octokit = new GitHub(token);
+    const octokit = github.getOctokit(token);
     const pathToJson = core.getInput('results-file');
 
     // Read Jest test results from JSON file
@@ -24,7 +23,7 @@ const main = async () => {
     const testFiles = testResults.testResults.map(testResult => testResult.name);
 
     // Create status check
-    await octokit.checks.create({
+    await octokit.rest.checks.create({
         ...github.context.repo,
         name: 'Jest Tests',
         head_sha: github.context.sha,
@@ -43,11 +42,10 @@ const main = async () => {
 
     // Create a pull request comment listing test files
     const testFilesComment = `### Jest Test Files\n\n${testFiles.map(file => `- ${file}`).join('\n')}`;
-    await octokit.issues.createComment({
+    await octokit.rest.issues.createComment({
         ...github.context.repo,
         issue_number: github.context.payload.pull_request.number,
         body: testFilesComment,
     });
 }
-
 main().catch(err => core.setFailed(err.message));
