@@ -2,7 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const fs = require('fs');
 
-try {
+const main = async () => {
     const token = core.getInput('github-token');
     const octokit = github.getOctokit(token);
     const pathToJson = core.getInput('results-file');
@@ -47,6 +47,6 @@ try {
         issue_number: github.context.payload.pull_request.number,
         body: testFilesComment,
     });
-} catch (error) {
-    core.setFailed(error.message);
 }
+
+main().catch(err => core.setFailed(err.message));
