@@ -1,10 +1,11 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const { GitHub } = require("@actions/github");
 const fs = require('fs');
 
 const main = async () => {
     const token = core.getInput('github-token');
-    const octokit = github.getOctokit(token);
+    const octokit = new GitHub(token);
     const pathToJson = core.getInput('results-file');
 
     // Read Jest test results from JSON file
