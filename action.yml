@@ -1,0 +1,15 @@
+name: 'Hello World'
+description: 'Greet someone and record the time'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+  results-file:
+    description: 'Json result file'
+    required: true 
+outputs:
+  test-files:
+    description: 'List of test files executed by Jest.'
+runs:
+  using: 'node20'
+  main: 'index.js'
